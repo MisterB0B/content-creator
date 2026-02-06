@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>Content Creator | The Light Park</title>
+  <style>
+    :root {
+      --bg: #0B0D14;
+      --surface: #12151F;
+      --surface2: #1a1e2e;
+      --border: #2a2f42;
+      --text: #f0f0f5;
+      --text-dim: #8888a0;
+      --purple: #a855f7;
+      --teal: #06d6a0;
+      --pink: #ff4fd8;
+      --orange: #f97316;
+      --green: #22c55e;
+    }
+    
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+    
+    /* Splash */
+    #splash {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: var(--bg);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      transition: opacity 0.5s;
+    }
+    #splash.hidden { opacity: 0; pointer-events: none; }
+    #splash img { max-width: 80%; max-height: 30vh; margin-bottom: 20px; }
+    #splash .loading { color: var(--teal); font-size: 14px; }
+    
+    /* Header */
+    .header {
+      background: linear-gradient(135deg, var(--surface), var(--bg));
+      border-bottom: 1px solid var(--border);
+      padding: 16px 20px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .header-inner {
+      max-width: 1000px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .logo { display: flex; align-items: center; gap: 12px; }
+    .logo-icon { font-size: 28px; }
+    .logo-text { font-size: 18px; font-weight: 700; }
+    .header-cta {
+      background: linear-gradient(135deg, var(--purple), var(--teal));
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      color: white;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    
+    /* Hero Section */
+    .hero {
+      background: linear-gradient(180deg, var(--surface) 0%, var(--bg) 100%);
+      padding: 60px 20px;
+      text-align: center;
+      border-bottom: 1px solid var(--border);
+    }
+    .hero-badge {
+      display: inline-block;
+      background: rgba(168, 85, 247, 0.2);
+      color: var(--purple);
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+    .hero h1 {
+      font-size: clamp(32px, 6vw, 48px);
+      font-weight: 800;
+      margin-bottom: 16px;
+      background: linear-gradient(135deg, var(--purple), var(--teal));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .hero p {
+      font-size: 18px;
+      color: var(--text-dim);
+      max-width: 600px;
+      margin: 0 auto 30px;
+    }
+    .hero-stats {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+    .stat { text-align: center; }
+    .stat-value { font-size: 36px; font-weight: 700; color: var(--teal); }
+    .stat-label { font-size: 13px; color: var(--text-dim); }
+    
+    /* Tabs */
+    .tabs {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      padding: 20px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      flex-wrap: wrap;
+    }
+    .tab {
+      padding: 10px 20px;
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text-dim);
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .tab:hover { border-color: var(--purple); color: var(--text); }
+    .tab.active {
+      background: linear-gradient(135deg, var(--purple), var(--teal));
+      border-color: transparent;
+      color: white;
+    }
+    
+    /* Content */
+    .content { display: none; padding: 40px 20px; max-width: 900px; margin: 0 auto; }
+    .content.active { display: block; }
+    
+    /* Section */
+    .section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+    .section-title {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .section-title .icon { font-size: 24px; }
+    
+    /* Job Highlights */
+    .highlights {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .highlight {
+      background: var(--surface2);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+    }
+    .highlight-icon { font-size: 32px; margin-bottom: 8px; }
+    .highlight-value { font-size: 20px; font-weight: 700; color: var(--teal); }
+    .highlight-label { font-size: 13px; color: var(--text-dim); }
+    
+    /* List */
+    .checklist { list-style: none; }
+    .checklist li {
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+    .checklist li:last-child { border: none; }
+    .checklist .check { color: var(--green); font-size: 18px; }
+    .checklist .x { color: var(--text-dim); }
+    
+    /* Timeline */
+    .timeline { position: relative; padding-left: 30px; }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 8px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: var(--border);
+    }
+    .timeline-item {
+      position: relative;
+      padding-bottom: 24px;
+    }
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -26px;
+      top: 4px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--purple);
+      border: 2px solid var(--bg);
+    }
+    .timeline-item.active::before { background: var(--teal); box-shadow: 0 0 10px var(--teal); }
+    .timeline-label { font-weight: 600; margin-bottom: 4px; }
+    .timeline-desc { font-size: 14px; color: var(--text-dim); }
+    
+    /* Venues Grid */
+    .venues-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+    }
+    .venue-card {
+      background: var(--surface2);
+      border-radius: 10px;
+      padding: 16px;
+      text-align: center;
+      border: 1px solid var(--border);
+    }
+    .venue-card .icon { font-size: 24px; margin-bottom: 8px; }
+    .venue-card .name { font-weight: 600; }
+    .venue-card .region { font-size: 12px; color: var(--text-dim); }
+    
+    /* Apply Form */
+    .form-group { margin-bottom: 20px; }
+    .form-label { display: block; font-size: 14px; font-weight: 600; margin-bottom: 8px; }
+    .form-input, .form-textarea, .form-select {
+      width: 100%;
+      padding: 14px 16px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text);
+      font-size: 15px;
+    }
+    .form-input:focus, .form-textarea:focus, .form-select:focus {
+      outline: none;
+      border-color: var(--purple);
+    }
+    .form-textarea { min-height: 120px; resize: vertical; }
+    .form-hint { font-size: 12px; color: var(--text-dim); margin-top: 6px; }
+    .form-btn {
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(135deg, var(--purple), var(--teal));
+      border: none;
+      border-radius: 10px;
+      color: white;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .form-btn:hover { opacity: 0.9; }
+    
+    /* Shot List */
+    .shot-phase {
+      background: var(--surface2);
+      border-radius: 12px;
+      margin-bottom: 16px;
+      overflow: hidden;
+    }
+    .shot-phase-header {
+      padding: 16px;
+      background: linear-gradient(90deg, rgba(168,85,247,0.2), transparent);
+      border-bottom: 1px solid var(--border);
+      font-weight: 600;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .shot-phase-body { padding: 16px; }
+    .shot-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 8px 0;
+      font-size: 14px;
+    }
+    .shot-item .bullet { color: var(--teal); }
+    
+    /* Equipment Table */
+    .equip-table { width: 100%; border-collapse: collapse; }
+    .equip-table th, .equip-table td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+    .equip-table th { font-size: 12px; color: var(--text-dim); font-weight: 600; }
+    .equip-table td { font-size: 14px; }
+    
+    /* Footer */
+    .footer {
+      text-align: center;
+      padding: 40px 20px;
+      border-top: 1px solid var(--border);
+    }
+    .footer p { color: var(--text-dim); font-size: 14px; }
+    .footer a { color: var(--purple); text-decoration: none; }
+    
+    /* Responsive */
+    @media (max-width: 600px) {
+      .hero { padding: 40px 16px; }
+      .hero-stats { gap: 24px; }
+      .stat-value { font-size: 28px; }
+      .tabs { padding: 12px; }
+      .tab { padding: 8px 14px; font-size: 13px; }
+      .content { padding: 24px 16px; }
+      .section { padding: 16px; }
+      .highlights { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Splash -->
+  <div id="splash">
+    <img src="logo.jpg" alt="Content Creator">
+    <div class="loading">Loading...</div>
+  </div>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="header-inner">
+      <div class="logo">
+        <span class="logo-icon">📹</span>
+        <span class="logo-text">Content Creator</span>
+      </div>
+      <a href="#apply" class="header-cta" onclick="showTab('apply')">Apply Now</a>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-badge">🎬 NOW HIRING — ALL VENUES</div>
+    <h1>Capture the Magic</h1>
+    <p>We build a complete Christmas light show in one week. We need local videographers to document the journey — from empty lot to opening night.</p>
+    <div class="hero-stats">
+      <div class="stat">
+        <div class="stat-value">8</div>
+        <div class="stat-label">Venues Hiring</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">12-15</div>
+        <div class="stat-label">Paid Days</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">$200</div>
+        <div class="stat-label">Per Day</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <button class="tab active" onclick="showTab('overview')">Overview</button>
+    <button class="tab" onclick="showTab('schedule')">Schedule</button>
+    <button class="tab" onclick="showTab('shots')">Shot List</button>
+    <button class="tab" onclick="showTab('equipment')">Equipment</button>
+    <button class="tab" onclick="showTab('apply')">Apply</button>
+  </div>
+
+  <!-- Overview Tab -->
+  <div class="content active" id="overviewTab">
+    <div class="section">
+      <div class="section-title"><span class="icon">🎯</span> The Mission</div>
+      <p style="color: var(--text-dim); margin-bottom: 20px;">Document a massive transformation: empty field → 250+ lit props → thousands of families experiencing the magic. Your footage will be seen by millions on TikTok, Instagram, and YouTube.</p>
+      
+      <div class="highlights">
+        <div class="highlight">
+          <div class="highlight-icon">📍</div>
+          <div class="highlight-value">Local</div>
+          <div class="highlight-label">Work Near Home</div>
+        </div>
+        <div class="highlight">
+          <div class="highlight-icon">🎥</div>
+          <div class="highlight-value">GoPros</div>
+          <div class="highlight-label">Equipment Provided</div>
+        </div>
+        <div class="highlight">
+          <div class="highlight-icon">📅</div>
+          <div class="highlight-value">Flexible</div>
+          <div class="highlight-label">Not Every Day</div>
+        </div>
+        <div class="highlight">
+          <div class="highlight-icon">🌟</div>
+          <div class="highlight-value">Viral</div>
+          <div class="highlight-label">Content Potential</div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="section">
+      <div class="section-title"><span class="icon">✅</span> Requirements</div>
+      <ul class="checklist">
+        <li><span class="check">✓</span> Local to venue (must arrive by 7:30am on build days)</li>
+        <li><span class="check">✓</span> Own smartphone with good camera (iPhone 12+ or equivalent)</li>
+        <li><span class="check">✓</span> Reliable transportation</li>
+        <li><span class="check">✓</span> Comfortable working outdoors in varying weather</li>
+        <li><span class="check">✓</span> Basic understanding of photo/video composition</li>
+        <li><span class="check">✓</span> Self-motivated and reliable</li>
+        <li><span class="check">✓</span> Available for the build period (Oct-Nov 2026)</li>
+      </ul>
+    </div>
+    
+    <div class="section">
+      <div class="section-title"><span class="icon">⭐</span> Bonus Points</div>
+      <ul class="checklist">
+        <li><span class="x">○</span> Own drone with Part 107 certification</li>
+        <li><span class="x">○</span> Video editing experience</li>
+        <li><span class="x">○</span> Social media savvy (know what makes good TikTok content)</li>
+        <li><span class="x">○</span> Previous construction or event documentation</li>
+      </ul>
+    </div>
+    
+    <div class="section">
+      <div class="section-title"><span class="icon">📍</span> Venues Hiring</div>
+      <div class="venues-grid">
+        <div class="venue-card"><div class="icon">🏟️</div><div class="name">Katy</div><div class="region">Houston Area</div></div>
+        <div class="venue-card"><div class="icon">🏟️</div><div class="name">Spring</div><div class="region">Houston Area</div></div>
+        <div class="venue-card"><div class="icon">🏟️</div><div class="name">Selma</div><div class="region">San Antonio</div></div>
+        <div class="venue-card"><div class="icon">🏟️</div><div class="name">Missions</div><div class="region">San Antonio</div></div>
+        <div class="venue-card"><div class="icon">🏟️</div><div class="name">Arlington</div><div class="region">DFW Area</div></div>
+        <div class="venue-card"><div class="icon">🏟️</div><div class="name">Frisco</div><div class="region">DFW Area</div></div>
+        <div class="venue-card"><div class="icon">🏟️</div><div class="name">Round Rock</div><div class="region">Austin Area</div></div>
+        <div class="venue-card"><div class="icon">🏟️</div><div class="name">Oklahoma City</div><div class="region">Oklahoma</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Schedule Tab -->
+  <div class="content" id="scheduleTab">
+    <div class="section">
+      <div class="section-title"><span class="icon">📅</span> Your Schedule</div>
+      <p style="color: var(--text-dim); margin-bottom: 24px;">You're not needed every day. Here's how the coverage breaks down:</p>
+      
+      <div class="timeline">
+        <div class="timeline-item active">
+          <div class="timeline-label">Staging (3 days) — FULL TIME</div>
+          <div class="timeline-desc">Trucks arrive, materials unloaded, site transforms. First truck = money shot.</div>
+        </div>
+        <div class="timeline-item active">
+          <div class="timeline-label">Build (4-5 days) — FULL TIME</div>
+          <div class="timeline-desc">Structures go up, tunnels raised, props assembled. The big transformation.</div>
+        </div>
+        <div class="timeline-item active">
+          <div class="timeline-label">Tech (2 days) — FULL TIME</div>
+          <div class="timeline-desc">Wiring, controllers, FIRST LIGHTS. This is the hero content.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-label">Gap Period (~2 weeks) — OCCASIONAL</div>
+          <div class="timeline-desc">2-3 short visits for B-roll. Empty show, golden hour, weather shots.</div>
+        </div>
+        <div class="timeline-item active">
+          <div class="timeline-label">Opening Day (1 day) — FULL TIME</div>
+          <div class="timeline-desc">First cars, guest reactions, the payoff.</div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="section">
+      <div class="section-title"><span class="icon">💰</span> Pay Structure</div>
+      <div class="highlights" style="grid-template-columns: 1fr 1fr;">
+        <div class="highlight">
+          <div class="highlight-icon">☀️</div>
+          <div class="highlight-value">$200</div>
+          <div class="highlight-label">Full Day (6-8 hrs)</div>
+        </div>
+        <div class="highlight">
+          <div class="highlight-icon">🌅</div>
+          <div class="highlight-value">$75</div>
+          <div class="highlight-label">B-Roll Visit (2-3 hrs)</div>
+        </div>
+      </div>
+      <p style="color: var(--text-dim); font-size: 14px; margin-top: 16px; text-align: center;">
+        <strong>Total earning potential: $2,400 - $3,000+ per venue</strong>
+      </p>
+    </div>
+    
+    <div class="section">
+      <div class="section-title"><span class="icon">⏰</span> Typical Day</div>
+      <ul class="checklist">
+        <li><span class="check">7:30am</span> Arrive, set up timelapse cameras before crews arrive</li>
+        <li><span class="check">8:00am</span> Verify cameras recording, capture crews starting work</li>
+        <li><span class="check">8am-12pm</span> Roam and capture B-roll, follow interesting action</li>
+        <li><span class="check">12:00pm</span> Midday camera check, swap batteries if needed</li>
+        <li><span class="check">12pm-5pm</span> Continue capturing, look for hero moments</li>
+        <li><span class="check">5-6pm</span> Golden hour — best light, priority shots</li>
+        <li><span class="check">6-7pm</span> Retrieve cameras, organize footage, upload</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Shots Tab -->
+  <div class="content" id="shotsTab">
+    <div class="section">
+      <div class="section-title"><span class="icon">🎬</span> Daily Shot List</div>
+      <p style="color: var(--text-dim); margin-bottom: 20px;">Here's what to capture each phase. Hero moments (⭐) are priority.</p>
+    </div>
+    
+    <div class="shot-phase">
+      <div class="shot-phase-header">
+        <span>📦 STAGING DAYS (1-3)</span>
+        <span style="color: var(--teal);">First trucks → Site prepped</span>
+      </div>
+      <div class="shot-phase-body">
+        <div class="shot-item"><span class="bullet">⭐</span> First truck pulling onto empty lot</div>
+        <div class="shot-item"><span class="bullet">•</span> Unloading semi trailers (wide + close-up)</div>
+        <div class="shot-item"><span class="bullet">•</span> Forklift action</div>
+        <div class="shot-item"><span class="bullet">•</span> Materials being staged across site</div>
+        <div class="shot-item"><span class="bullet">•</span> Fence installation</div>
+        <div class="shot-item"><span class="bullet">•</span> Tunnel layouts on ground (RGB, Pipe, Truss)</div>
+        <div class="shot-item"><span class="bullet">•</span> Water totes being filled</div>
+        <div class="shot-item"><span class="bullet">⭐</span> Crew walking empty lot planning (people in frame!)</div>
+      </div>
+    </div>
+    
+    <div class="shot-phase">
+      <div class="shot-phase-header">
+        <span>🏗️ BUILD DAYS (1-5)</span>
+        <span style="color: var(--teal);">Structures rise</span>
+      </div>
+      <div class="shot-phase-body">
+        <div class="shot-item"><span class="bullet">⭐</span> Truss Tunnel being raised to full height</div>
+        <div class="shot-item"><span class="bullet">⭐</span> RGB Tunnel going up (massive)</div>
+        <div class="shot-item"><span class="bullet">•</span> Pipe Tunnels built and raised</div>
+        <div class="shot-item"><span class="bullet">•</span> Big Prop Centerpiece assembly</div>
+        <div class="shot-item"><span class="bullet">•</span> 16' and 20' Trees going up</div>
+        <div class="shot-item"><span class="bullet">•</span> Portal Trusses (House, Nativity, Fireplace)</div>
+        <div class="shot-item"><span class="bullet">⭐</span> Boom lift operator silhouette against sky</div>
+        <div class="shot-item"><span class="bullet">•</span> Crew collaboration / pointing / planning</div>
+        <div class="shot-item"><span class="bullet">•</span> Close-ups of hands working</div>
+        <div class="shot-item"><span class="bullet">•</span> Sandbags on all props (end of day)</div>
+      </div>
+    </div>
+    
+    <div class="shot-phase">
+      <div class="shot-phase-header">
+        <span>⚡ TECH DAYS (1-2)</span>
+        <span style="color: var(--teal);">First lights!</span>
+      </div>
+      <div class="shot-phase-body">
+        <div class="shot-item"><span class="bullet">•</span> Cable/wire organization and prep</div>
+        <div class="shot-item"><span class="bullet">•</span> Controllers being installed</div>
+        <div class="shot-item"><span class="bullet">•</span> WiFi mesh points going up</div>
+        <div class="shot-item"><span class="bullet">•</span> Show cameras installed</div>
+        <div class="shot-item"><span class="bullet">⭐</span> FIRST PIXEL LIGHTING UP (capture reactions!)</div>
+        <div class="shot-item"><span class="bullet">⭐</span> Individual props testing</div>
+        <div class="shot-item"><span class="bullet">⭐</span> Crew reactions to lights working</div>
+        <div class="shot-item"><span class="bullet">⭐</span> Full show running at night</div>
+      </div>
+    </div>
+    
+    <div class="shot-phase">
+      <div class="shot-phase-header">
+        <span>🌅 GAP PERIOD B-ROLL</span>
+        <span style="color: var(--teal);">2-3 visits</span>
+      </div>
+      <div class="shot-phase-body">
+        <div class="shot-item"><span class="bullet">•</span> Empty show, no people (clean beauty shots)</div>
+        <div class="shot-item"><span class="bullet">⭐</span> Golden hour / sunset through structures</div>
+        <div class="shot-item"><span class="bullet">⭐</span> Morning fog if available</div>
+        <div class="shot-item"><span class="bullet">•</span> Detail shots of props (close-ups)</div>
+        <div class="shot-item"><span class="bullet">•</span> Drone overview (if licensed)</div>
+      </div>
+    </div>
+    
+    <div class="shot-phase">
+      <div class="shot-phase-header">
+        <span>🎄 OPENING DAY</span>
+        <span style="color: var(--teal);">The payoff</span>
+      </div>
+      <div class="shot-phase-body">
+        <div class="shot-item"><span class="bullet">⭐</span> First car entering</div>
+        <div class="shot-item"><span class="bullet">⭐</span> Family reactions through windows</div>
+        <div class="shot-item"><span class="bullet">⭐</span> Kids' faces seeing lights (with permission)</div>
+        <div class="shot-item"><span class="bullet">•</span> Full show from car POV (ride-along)</div>
+        <div class="shot-item"><span class="bullet">•</span> Staff in positions</div>
+        <div class="shot-item"><span class="bullet">⭐</span> Before/after comparison: empty lot → opening night</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Equipment Tab -->
+  <div class="content" id="equipmentTab">
+    <div class="section">
+      <div class="section-title"><span class="icon">🎥</span> Equipment We Provide</div>
+      <p style="color: var(--text-dim); margin-bottom: 20px;">Everything you need for timelapse capture. You just bring your phone and yourself.</p>
+      
+      <table class="equip-table">
+        <thead>
+          <tr><th>Item</th><th>Qty</th><th>Purpose</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>GoPro Hero 12 Black</td><td>3</td><td>Timelapse cameras</td></tr>
+          <tr><td>GoPro Max Batteries</td><td>6</td><td>Extended recording</td></tr>
+          <tr><td>128GB SD Cards</td><td>6</td><td>Storage (swap daily)</td></tr>
+          <tr><td>Suction Mount</td><td>2</td><td>Vehicle/equipment mounting</td></tr>
+          <tr><td>Clamp Mount</td><td>2</td><td>Fence/pole mounting</td></tr>
+          <tr><td>Tripod Mount</td><td>2</td><td>Ground-level shots</td></tr>
+          <tr><td>Weatherproof Housing</td><td>3</td><td>Rain protection</td></tr>
+          <tr><td>Portable Battery Pack</td><td>2</td><td>Field charging</td></tr>
+          <tr><td>Pelican Case</td><td>1</td><td>Equipment storage</td></tr>
+          <tr><td>High-Vis Vest</td><td>1</td><td>Safety on site</td></tr>
+        </tbody>
+      </table>
+    </div>
+    
+    <div class="section">
+      <div class="section-title"><span class="icon">📱</span> You Provide</div>
+      <ul class="checklist">
+        <li><span class="check">✓</span> Smartphone with good camera (for daily B-roll)</li>
+        <li><span class="check">✓</span> Reliable transportation to/from venue</li>
+        <li><span class="check">✓</span> Laptop or internet access for uploads (or use site WiFi)</li>
+      </ul>
+    </div>
+    
+    <div class="section">
+      <div class="section-title"><span class="icon">📍</span> Timelapse Positions</div>
+      <div class="highlights" style="grid-template-columns: 1fr;">
+        <div class="highlight" style="text-align: left; padding: 20px;">
+          <strong style="color: var(--purple);">Position A: "The Overview"</strong><br>
+          <span style="color: var(--text-dim); font-size: 14px;">Highest safe vantage point. Wide shot capturing as much of venue as possible. This is your "before/after" comparison camera.</span>
+        </div>
+        <div class="highlight" style="text-align: left; padding: 20px;">
+          <strong style="color: var(--purple);">Position B: "The Hero Prop"</strong><br>
+          <span style="color: var(--text-dim); font-size: 14px;">Focused on the main centerpiece being built. Medium shot showing the prop and immediate surroundings.</span>
+        </div>
+        <div class="highlight" style="text-align: left; padding: 20px;">
+          <strong style="color: var(--purple);">Position C: "The Tunnel" (Rotate)</strong><br>
+          <span style="color: var(--text-dim); font-size: 14px;">Moves to whichever tunnel/structure is being built that day. Looking down the tunnel length.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Apply Tab -->
+  <div class="content" id="applyTab">
+    <div class="section">
+      <div class="section-title"><span class="icon">📝</span> Apply Now</div>
+      <p style="color: var(--text-dim); margin-bottom: 24px;">No formal resume needed. Just tell us about yourself and show us you can capture compelling content.</p>
+      
+      <form id="applyForm" onsubmit="submitApplication(event)">
+        <div class="form-group">
+          <label class="form-label">Your Name *</label>
+          <input type="text" class="form-input" id="appName" required placeholder="Full name">
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label">Email *</label>
+          <input type="email" class="form-input" id="appEmail" required placeholder="your@email.com">
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label">Phone *</label>
+          <input type="tel" class="form-input" id="appPhone" required placeholder="(555) 123-4567">
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label">Which venue(s) are you applying for? *</label>
+          <select class="form-select" id="appVenue" required>
+            <option value="">Select a venue...</option>
+            <option value="katy">Katy (Houston Area)</option>
+            <option value="spring">Spring (Houston Area)</option>
+            <option value="selma">Selma (San Antonio)</option>
+            <option value="missions">Missions (San Antonio)</option>
+            <option value="arlington">Arlington (DFW)</option>
+            <option value="frisco">Frisco (DFW)</option>
+            <option value="roundrock">Round Rock (Austin)</option>
+            <option value="okc">Oklahoma City</option>
+            <option value="multiple">Multiple / Flexible</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label">Link to your work (TikTok, Instagram, YouTube, portfolio)</label>
+          <input type="url" class="form-input" id="appPortfolio" placeholder="https://...">
+          <div class="form-hint">Even a personal TikTok or Instagram works. We want to see your eye for content.</div>
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label">Do you have a drone with Part 107 certification?</label>
+          <select class="form-select" id="appDrone">
+            <option value="no">No</option>
+            <option value="yes">Yes — licensed and insured</option>
+            <option value="unlicensed">Yes — but not commercially licensed</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label">Why are you interested? *</label>
+          <textarea class="form-textarea" id="appWhy" required placeholder="Tell us a bit about yourself and why this sounds cool to you..."></textarea>
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label">Availability</label>
+          <textarea class="form-textarea" id="appAvail" placeholder="Any dates in Oct-Nov you're NOT available? Any scheduling constraints?"></textarea>
+        </div>
+        
+        <button type="submit" class="form-btn">Submit Application</button>
+      </form>
+    </div>
+    
+    <div class="section" style="text-align: center;">
+      <p style="color: var(--text-dim);">Prefer email? Send your info to:</p>
+      <p style="font-size: 18px; font-weight: 600; color: var(--teal); margin-top: 8px;">
+        <a href="mailto:bobdodgecreative@gmail.com" style="color: var(--teal);">bobdodgecreative@gmail.com</a>
+      </p>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p><strong>The Light Park</strong> — Texas' Premier Drive-Through Christmas Light Experience</p>
+    <p style="margin-top: 8px;"><a href="https://thelightpark.com" target="_blank">thelightpark.com</a></p>
+  </footer>
+
+  <script>
+    // Splash
+    setTimeout(() => document.getElementById('splash').classList.add('hidden'), 1000);
+    
+    // Tabs
+    function showTab(tabId) {
+      document.querySelectorAll('.content').forEach(c => c.classList.remove('active'));
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.getElementById(tabId + 'Tab').classList.add('active');
+      event.target.classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    
+    // Form submission
+    function submitApplication(e) {
+      e.preventDefault();
+      
+      const data = {
+        name: document.getElementById('appName').value,
+        email: document.getElementById('appEmail').value,
+        phone: document.getElementById('appPhone').value,
+        venue: document.getElementById('appVenue').value,
+        portfolio: document.getElementById('appPortfolio').value,
+        drone: document.getElementById('appDrone').value,
+        why: document.getElementById('appWhy').value,
+        availability: document.getElementById('appAvail').value,
+        submitted: new Date().toISOString()
+      };
+      
+      // Store locally for now
+      const apps = JSON.parse(localStorage.getItem('contentCreatorApps') || '[]');
+      apps.push(data);
+      localStorage.setItem('contentCreatorApps', JSON.stringify(apps));
+      
+      // Show confirmation
+      alert('✅ Application submitted!\n\nWe\'ll review your info and reach out soon. Check your email for next steps.');
+      
+      // Reset form
+      document.getElementById('applyForm').reset();
+      
+      // In production, this would POST to a backend
+      console.log('Application:', data);
+    }
+  </script>
+</body>
+</html>
