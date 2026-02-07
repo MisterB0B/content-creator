@@ -3,8 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Now Hiring: Content Creators | The Light Park</title>
-  <meta name="description" content="We're hiring 8 local videographers to document the build of Texas' biggest Christmas light show. $200/day, flexible schedule.">
+  <title>Apply — Content Creator | The Light Park</title>
   <style>
     :root {
       --bg: #0B0D14;
@@ -15,271 +14,391 @@
       --text-dim: #8888a0;
       --purple: #a855f7;
       --teal: #06d6a0;
+      --pink: #ff4fd8;
       --green: #22c55e;
+      --red: #ef4444;
     }
     
     * { margin: 0; padding: 0; box-sizing: border-box; }
+    
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
       background: var(--bg);
       color: var(--text);
+      min-height: 100vh;
       line-height: 1.6;
     }
     
-    .container { max-width: 700px; margin: 0 auto; padding: 20px; }
-    
     /* Hero */
     .hero {
-      text-align: center;
+      background: linear-gradient(135deg, var(--purple) 0%, var(--pink) 100%);
       padding: 60px 20px;
-      background: linear-gradient(180deg, var(--surface), var(--bg));
+      text-align: center;
     }
-    .hero img { max-width: 80%; max-height: 200px; margin-bottom: 24px; }
+    .hero h1 { font-size: 32px; font-weight: 800; margin-bottom: 8px; }
+    .hero p { font-size: 18px; opacity: 0.9; max-width: 500px; margin: 0 auto; }
     .hero-badge {
       display: inline-block;
-      background: var(--purple);
-      padding: 6px 16px;
+      background: rgba(0,0,0,0.3);
+      padding: 8px 20px;
       border-radius: 20px;
-      font-size: 13px;
+      margin-top: 16px;
       font-weight: 700;
-      margin-bottom: 16px;
+      font-size: 14px;
     }
-    .hero h1 {
-      font-size: 32px;
-      margin-bottom: 12px;
-      background: linear-gradient(135deg, var(--purple), var(--teal));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    .hero p { color: var(--text-dim); font-size: 16px; max-width: 500px; margin: 0 auto; }
     
-    /* Stats */
-    .stats {
-      display: flex;
-      justify-content: center;
-      gap: 32px;
-      margin-top: 32px;
-      flex-wrap: wrap;
+    .container {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 24px 20px;
     }
-    .stat { text-align: center; }
-    .stat-value { font-size: 32px; font-weight: 700; color: var(--teal); }
-    .stat-label { font-size: 12px; color: var(--text-dim); }
     
-    /* Sections */
+    /* Section */
     .section {
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 16px;
+      border-radius: 12px;
       padding: 24px;
       margin-bottom: 20px;
     }
-    .section-title { font-size: 18px; font-weight: 700; margin-bottom: 16px; }
+    .section h2 {
+      font-size: 20px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .section h2 .emoji { font-size: 24px; }
     
     /* List */
     ul { list-style: none; }
-    li { padding: 10px 0; border-bottom: 1px solid var(--border); display: flex; align-items: flex-start; gap: 10px; }
-    li:last-child { border: none; }
-    .check { color: var(--green); }
+    ul li {
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+    ul li:last-child { border-bottom: none; }
+    ul li::before {
+      content: "✓";
+      color: var(--teal);
+      font-weight: bold;
+    }
+    
+    /* Pay Grid */
+    .pay-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-top: 12px;
+    }
+    .pay-card {
+      background: var(--surface2);
+      border-radius: 10px;
+      padding: 16px;
+      text-align: center;
+    }
+    .pay-amount {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--teal);
+    }
+    .pay-label { font-size: 13px; color: var(--text-dim); margin-top: 4px; }
     
     /* Venues */
-    .venues { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; }
-    .venue {
-      background: var(--surface2);
-      padding: 14px;
-      border-radius: 10px;
-      text-align: center;
-      border: 1px solid var(--border);
+    .venue-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
     }
-    .venue .name { font-weight: 600; }
-    .venue .region { font-size: 12px; color: var(--text-dim); }
+    .venue-item {
+      background: var(--surface2);
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .venue-item .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--green);
+    }
     
     /* Form */
-    .form-group { margin-bottom: 18px; }
-    .form-label { display: block; font-size: 14px; font-weight: 600; margin-bottom: 6px; }
-    .form-input, .form-select, .form-textarea {
+    .form-group { margin-bottom: 20px; }
+    .form-group label {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
       width: 100%;
-      padding: 14px;
+      padding: 14px 16px;
       background: var(--surface2);
       border: 1px solid var(--border);
       border-radius: 10px;
       color: var(--text);
       font-size: 15px;
+      font-family: inherit;
     }
-    .form-textarea { min-height: 120px; resize: vertical; }
-    .form-hint { font-size: 12px; color: var(--text-dim); margin-top: 4px; }
-    .form-btn {
-      width: 100%;
-      padding: 16px;
-      background: linear-gradient(135deg, var(--purple), var(--teal));
-      border: none;
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: var(--purple);
+    }
+    .form-group textarea { resize: vertical; min-height: 100px; }
+    .form-group small { display: block; color: var(--text-dim); font-size: 12px; margin-top: 6px; }
+    
+    /* Checkbox */
+    .checkbox-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .checkbox-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--surface2);
+      padding: 10px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      transition: all 0.2s;
+    }
+    .checkbox-item:has(input:checked) {
+      border-color: var(--purple);
+      background: rgba(168, 85, 247, 0.15);
+    }
+    .checkbox-item input { display: none; }
+    .checkbox-item span { font-size: 14px; }
+    
+    /* Button */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 16px 32px;
       border-radius: 12px;
-      color: white;
       font-size: 16px;
       font-weight: 700;
       cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+      text-decoration: none;
+      width: 100%;
     }
-    .form-btn:hover { opacity: 0.9; }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--purple), var(--pink));
+      color: white;
+    }
+    .btn-primary:hover { opacity: 0.9; transform: translateY(-2px); }
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+    
+    /* Success */
+    .success-message {
+      text-align: center;
+      padding: 40px 20px;
+    }
+    .success-message .icon { font-size: 64px; margin-bottom: 16px; }
+    .success-message h2 { color: var(--teal); margin-bottom: 8px; }
     
     /* Footer */
-    .footer { text-align: center; padding: 40px 20px; color: var(--text-dim); font-size: 13px; }
-    .footer a { color: var(--purple); text-decoration: none; }
+    footer {
+      text-align: center;
+      padding: 32px 20px;
+      color: var(--text-dim);
+      font-size: 13px;
+    }
+    footer a { color: var(--purple); }
+    
+    @media (max-width: 500px) {
+      .hero h1 { font-size: 26px; }
+      .pay-grid { grid-template-columns: 1fr; }
+      .venue-grid { grid-template-columns: 1fr; }
+    }
   </style>
 </head>
 <body>
   <div class="hero">
-    <img src="logo.jpg" alt="Content Creator">
-    <div class="hero-badge">🎬 NOW HIRING — 8 POSITIONS</div>
-    <h1>Capture the Magic</h1>
-    <p>We need <strong>one local videographer per venue</strong> to document the build — from empty lot to opening night.</p>
-    <div class="stats">
-      <div class="stat"><div class="stat-value">8</div><div class="stat-label">Positions</div></div>
-      <div class="stat"><div class="stat-value">12-15</div><div class="stat-label">Paid Days</div></div>
-      <div class="stat"><div class="stat-value">$200</div><div class="stat-label">Per Day</div></div>
-    </div>
+    <h1>🎬 Join Our Creator Team</h1>
+    <p>Get paid to create content for Texas's biggest drive-through light show</p>
+    <div class="hero-badge">📍 8 Venues • Now Hiring</div>
   </div>
   
   <div class="container">
+    <!-- The Gig -->
     <div class="section">
-      <div class="section-title">🎯 The Job</div>
-      <p style="color: var(--text-dim); margin-bottom: 16px;">Document the transformation: empty field → 250+ lit props → thousands of families experiencing the magic. Your footage goes on TikTok, Instagram, and YouTube.</p>
+      <h2><span class="emoji">💼</span> The Gig</h2>
       <ul>
-        <li><span class="check">✓</span> Set up and manage 3 GoPro timelapse cameras daily</li>
-        <li><span class="check">✓</span> Capture B-roll of construction crews building light displays</li>
-        <li><span class="check">✓</span> Document hero moments (first lights, structures rising)</li>
-        <li><span class="check">✓</span> Upload and organize footage daily</li>
+        <li>Capture behind-the-scenes build content & opening night magic</li>
+        <li>Create TikTok/Reels-ready vertical videos</li>
+        <li>Work ~12-15 days spread over 3-4 weeks per venue</li>
+        <li>Equipment provided (GoPro, gimbal, mic)</li>
+        <li>Creative freedom with daily shot lists as guide</li>
       </ul>
     </div>
     
+    <!-- Pay -->
     <div class="section">
-      <div class="section-title">📅 Schedule</div>
-      <ul>
-        <li><span class="check">✓</span> <strong>10-12 active days</strong> during staging + build + tech</li>
-        <li><span class="check">✓</span> <strong>2-3 B-roll visits</strong> during gap (2-3 hrs each)</li>
-        <li><span class="check">✓</span> <strong>1 day</strong> for opening night coverage</li>
-        <li><span class="check">✓</span> Hours: 7:30am - 6pm on build days</li>
-        <li><span class="check">✓</span> Dates: October - November 2026</li>
-      </ul>
+      <h2><span class="emoji">💰</span> Pay</h2>
+      <div class="pay-grid">
+        <div class="pay-card">
+          <div class="pay-amount">$200</div>
+          <div class="pay-label">Full Production Day</div>
+        </div>
+        <div class="pay-card">
+          <div class="pay-amount">$75</div>
+          <div class="pay-label">B-Roll Visit</div>
+        </div>
+        <div class="pay-card">
+          <div class="pay-amount">+$50</div>
+          <div class="pay-label">10K Views Bonus</div>
+        </div>
+        <div class="pay-card">
+          <div class="pay-amount">+$500</div>
+          <div class="pay-label">Viral Hit Bonus (100K+)</div>
+        </div>
+      </div>
+      <p style="font-size:13px;color:var(--text-dim);margin-top:16px;text-align:center;">Typical season earnings: $1,500 - $2,500+ per venue</p>
     </div>
     
+    <!-- Venues -->
     <div class="section">
-      <div class="section-title">✅ Requirements</div>
-      <ul>
-        <li><span class="check">✓</span> Local to the venue (can arrive by 7:30am)</li>
-        <li><span class="check">✓</span> Smartphone with good camera (iPhone 12+ or similar)</li>
-        <li><span class="check">✓</span> Reliable transportation</li>
-        <li><span class="check">✓</span> Comfortable outdoors in varying weather</li>
-        <li><span class="check">✓</span> Self-motivated and reliable</li>
-      </ul>
-      <p style="color: var(--text-dim); font-size: 13px; margin-top: 16px;"><strong>Bonus:</strong> Drone with Part 107 license, video editing experience, social media savvy</p>
-    </div>
-    
-    <div class="section">
-      <div class="section-title">🎥 We Provide</div>
-      <ul>
-        <li><span class="check">✓</span> 3 GoPro cameras + mounts + batteries</li>
-        <li><span class="check">✓</span> SD cards and weatherproof cases</li>
-        <li><span class="check">✓</span> Full training and daily shot lists</li>
-        <li><span class="check">✓</span> High-vis vest and site access</li>
-      </ul>
-    </div>
-    
-    <div class="section">
-      <div class="section-title">📍 Venues (Pick One)</div>
-      <p style="color: var(--text-dim); margin-bottom: 16px;">Each venue needs one local person. Apply for the one closest to you.</p>
-      <div class="venues">
-        <div class="venue"><div class="name">Katy</div><div class="region">Houston</div></div>
-        <div class="venue"><div class="name">Spring</div><div class="region">Houston</div></div>
-        <div class="venue"><div class="name">Selma</div><div class="region">San Antonio</div></div>
-        <div class="venue"><div class="name">Missions</div><div class="region">San Antonio</div></div>
-        <div class="venue"><div class="name">Arlington</div><div class="region">DFW</div></div>
-        <div class="venue"><div class="name">Frisco</div><div class="region">DFW</div></div>
-        <div class="venue"><div class="name">Round Rock</div><div class="region">Austin</div></div>
-        <div class="venue"><div class="name">OKC</div><div class="region">Oklahoma</div></div>
+      <h2><span class="emoji">📍</span> Open Positions</h2>
+      <p style="font-size:14px;color:var(--text-dim);margin-bottom:16px;">Select the venue(s) you can work at:</p>
+      <div class="venue-grid">
+        <div class="venue-item"><span class="dot"></span> Katy (Houston)</div>
+        <div class="venue-item"><span class="dot"></span> Spring (Houston)</div>
+        <div class="venue-item"><span class="dot"></span> Selma (San Antonio)</div>
+        <div class="venue-item"><span class="dot"></span> Missions (San Antonio)</div>
+        <div class="venue-item"><span class="dot"></span> Arlington (DFW)</div>
+        <div class="venue-item"><span class="dot"></span> Frisco (DFW)</div>
+        <div class="venue-item"><span class="dot"></span> Round Rock (Austin)</div>
+        <div class="venue-item"><span class="dot"></span> Oklahoma City</div>
       </div>
     </div>
     
-    <div class="section">
-      <div class="section-title">📝 Apply</div>
-      <form id="applyForm" onsubmit="submitApp(event)">
-        <div class="form-group">
-          <label class="form-label">Name *</label>
-          <input type="text" class="form-input" id="name" required placeholder="Your full name">
-        </div>
-        <div class="form-group">
-          <label class="form-label">Email *</label>
-          <input type="email" class="form-input" id="email" required placeholder="your@email.com">
-        </div>
-        <div class="form-group">
-          <label class="form-label">Phone *</label>
-          <input type="tel" class="form-input" id="phone" required placeholder="(555) 123-4567">
-        </div>
-        <div class="form-group">
-          <label class="form-label">Venue *</label>
-          <select class="form-select" id="venue" required>
-            <option value="">Select venue...</option>
-            <option value="katy">Katy (Houston)</option>
-            <option value="spring">Spring (Houston)</option>
-            <option value="selma">Selma (San Antonio)</option>
-            <option value="missions">Missions (San Antonio)</option>
-            <option value="arlington">Arlington (DFW)</option>
-            <option value="frisco">Frisco (DFW)</option>
-            <option value="roundrock">Round Rock (Austin)</option>
-            <option value="okc">Oklahoma City</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Link to your work</label>
-          <input type="url" class="form-input" id="portfolio" placeholder="TikTok, Instagram, YouTube, etc.">
-          <div class="form-hint">Show us your eye for content — even personal social media works.</div>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Do you have a drone?</label>
-          <select class="form-select" id="drone">
-            <option value="no">No</option>
-            <option value="yes">Yes — Part 107 licensed</option>
-            <option value="unlicensed">Yes — not commercially licensed</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Why are you interested? *</label>
-          <textarea class="form-textarea" id="why" required placeholder="Tell us about yourself..."></textarea>
-        </div>
-        <button type="submit" class="form-btn">Submit Application</button>
-      </form>
+    <!-- Application Form -->
+    <div class="section" id="applicationForm">
+      <h2><span class="emoji">📝</span> Apply Now</h2>
       
-      <p style="text-align: center; margin-top: 20px; color: var(--text-dim); font-size: 13px;">
-        Or email directly: <a href="mailto:bobdodgecreative@gmail.com" style="color: var(--teal);">bobdodgecreative@gmail.com</a>
-      </p>
+      <form id="applyForm">
+        <div class="form-group">
+          <label>Full Name *</label>
+          <input type="text" name="name" required placeholder="Your name">
+        </div>
+        
+        <div class="form-group">
+          <label>Email *</label>
+          <input type="email" name="email" required placeholder="you@email.com">
+        </div>
+        
+        <div class="form-group">
+          <label>Phone *</label>
+          <input type="tel" name="phone" required placeholder="(555) 123-4567">
+        </div>
+        
+        <div class="form-group">
+          <label>Preferred Venue(s) *</label>
+          <div class="checkbox-group">
+            <label class="checkbox-item"><input type="checkbox" name="venues" value="katy"><span>Katy</span></label>
+            <label class="checkbox-item"><input type="checkbox" name="venues" value="spring"><span>Spring</span></label>
+            <label class="checkbox-item"><input type="checkbox" name="venues" value="selma"><span>Selma</span></label>
+            <label class="checkbox-item"><input type="checkbox" name="venues" value="missions"><span>Missions</span></label>
+            <label class="checkbox-item"><input type="checkbox" name="venues" value="arlington"><span>Arlington</span></label>
+            <label class="checkbox-item"><input type="checkbox" name="venues" value="frisco"><span>Frisco</span></label>
+            <label class="checkbox-item"><input type="checkbox" name="venues" value="round-rock"><span>Round Rock</span></label>
+            <label class="checkbox-item"><input type="checkbox" name="venues" value="okc"><span>OKC</span></label>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label>Link to Your Work *</label>
+          <input type="url" name="portfolio" required placeholder="TikTok, Instagram, YouTube, or portfolio URL">
+          <small>Share your best content — we want to see your style!</small>
+        </div>
+        
+        <div class="form-group">
+          <label>Do you have your own equipment?</label>
+          <select name="equipment">
+            <option value="none">No, I'll need equipment provided</option>
+            <option value="phone">Just my phone</option>
+            <option value="basic">Phone + gimbal</option>
+            <option value="full">Full setup (camera, gimbal, mic, etc.)</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label>Anything else we should know?</label>
+          <textarea name="notes" placeholder="Experience, availability, questions..."></textarea>
+        </div>
+        
+        <button type="submit" class="btn btn-primary">
+          🚀 Submit Application
+        </button>
+      </form>
+    </div>
+    
+    <!-- Success State -->
+    <div class="section success-message" id="successMessage" style="display:none;">
+      <div class="icon">🎉</div>
+      <h2>Application Submitted!</h2>
+      <p style="color:var(--text-dim);">We'll review your application and reach out within a few days if you're a good fit.</p>
+      <p style="margin-top:16px;"><a href="https://thelightpark.com" style="color:var(--purple);">Learn more about The Light Park →</a></p>
     </div>
   </div>
   
-  <div class="footer">
-    <p><strong>The Light Park</strong> — Texas' Premier Drive-Through Christmas Light Experience</p>
-    <p style="margin-top: 8px;"><a href="https://thelightpark.com">thelightpark.com</a></p>
-  </div>
+  <footer>
+    <p>The Light Park © 2026 · <a href="https://thelightpark.com">thelightpark.com</a></p>
+  </footer>
   
   <script>
-    function submitApp(e) {
+    const form = document.getElementById('applyForm');
+    const formSection = document.getElementById('applicationForm');
+    const successMessage = document.getElementById('successMessage');
+    
+    form.addEventListener('submit', (e) => {
       e.preventDefault();
+      
+      // Gather form data
+      const formData = new FormData(form);
       const data = {
-        name: document.getElementById('name').value,
-        email: document.getElementById('email').value,
-        phone: document.getElementById('phone').value,
-        venue: document.getElementById('venue').value,
-        portfolio: document.getElementById('portfolio').value,
-        drone: document.getElementById('drone').value,
-        why: document.getElementById('why').value,
+        name: formData.get('name'),
+        email: formData.get('email'),
+        phone: formData.get('phone'),
+        venues: formData.getAll('venues'),
+        portfolio: formData.get('portfolio'),
+        equipment: formData.get('equipment'),
+        notes: formData.get('notes'),
         submitted: new Date().toISOString()
       };
       
-      // Save locally
-      const apps = JSON.parse(localStorage.getItem('contentCreatorApps') || '[]');
-      apps.push(data);
-      localStorage.setItem('contentCreatorApps', JSON.stringify(apps));
+      // Save to localStorage (for demo)
+      const applications = JSON.parse(localStorage.getItem('creatorApplications') || '[]');
+      applications.push(data);
+      localStorage.setItem('creatorApplications', JSON.stringify(applications));
       
-      alert('✅ Application submitted!\\n\\nWe\\'ll review your info and reach out soon.');
-      document.getElementById('applyForm').reset();
-    }
+      // Show success
+      formSection.style.display = 'none';
+      successMessage.style.display = 'block';
+      
+      // Scroll to top
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
   </script>
 </body>
 </html>
