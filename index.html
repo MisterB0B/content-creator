@@ -58,59 +58,41 @@
     }
     .header h1 { font-size: 24px; font-weight: 800; margin-bottom: 4px; }
     .header p { opacity: 0.9; font-size: 14px; }
-    .venue-badge {
-      display: inline-block;
+    .venue-select {
+      margin-top: 12px;
+      padding: 8px 16px;
       background: rgba(0,0,0,0.3);
-      padding: 6px 16px;
+      border: none;
       border-radius: 20px;
-      margin-top: 10px;
+      color: white;
+      font-size: 14px;
       font-weight: 600;
-      font-size: 13px;
+      cursor: pointer;
     }
-    
-    /* Stats Row */
-    .stats-row {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
-      padding: 16px;
-      margin-top: -20px;
-    }
-    .stat-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 16px 12px;
-      text-align: center;
-    }
-    .stat-value {
-      font-size: 28px;
-      font-weight: 800;
-      background: linear-gradient(135deg, var(--purple), var(--teal));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    .stat-label { font-size: 11px; color: var(--text-dim); margin-top: 4px; }
+    .venue-select option { color: #000; }
     
     /* Tabs */
     .tabs {
       display: flex;
       border-bottom: 1px solid var(--border);
       padding: 0 16px;
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
+      background: var(--surface);
+      position: sticky;
+      top: 0;
+      z-index: 100;
     }
     .tab {
-      padding: 14px 16px;
+      flex: 1;
+      padding: 14px 8px;
       background: none;
       border: none;
       color: var(--text-dim);
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 600;
       cursor: pointer;
-      white-space: nowrap;
       border-bottom: 2px solid transparent;
       margin-bottom: -1px;
+      text-align: center;
     }
     .tab.active {
       color: var(--purple);
@@ -140,6 +122,16 @@
     .section-title .emoji { font-size: 20px; }
     
     /* Shot List */
+    .day-info {
+      background: linear-gradient(135deg, rgba(168,85,247,0.2), rgba(6,214,160,0.2));
+      border-radius: 10px;
+      padding: 14px;
+      margin-bottom: 16px;
+      text-align: center;
+    }
+    .day-info h3 { font-size: 18px; margin-bottom: 4px; }
+    .day-info p { font-size: 13px; color: var(--text-dim); }
+    
     .shot-item {
       display: flex;
       align-items: flex-start;
@@ -179,10 +171,9 @@
       font-weight: 600;
     }
     .priority-hero { background: var(--gold); color: #000; }
-    .priority-high { background: var(--red); color: #fff; }
-    .priority-normal { background: var(--surface2); color: var(--text-dim); }
+    .priority-high { background: var(--orange); color: #fff; }
     
-    /* Upload Card */
+    /* Upload Zone */
     .upload-zone {
       border: 2px dashed var(--border);
       border-radius: 12px;
@@ -199,7 +190,7 @@
     .upload-zone h3 { font-size: 16px; margin-bottom: 4px; }
     .upload-zone p { font-size: 13px; color: var(--text-dim); }
     
-    /* Upload Queue */
+    /* Upload Item */
     .upload-item {
       display: flex;
       align-items: center;
@@ -214,7 +205,10 @@
       height: 40px;
       background: var(--border);
       border-radius: 6px;
-      object-fit: cover;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
     }
     .upload-info { flex: 1; }
     .upload-name { font-size: 13px; font-weight: 600; }
@@ -229,7 +223,6 @@
     .upload-progress-bar {
       height: 100%;
       background: linear-gradient(90deg, var(--purple), var(--teal));
-      width: 0%;
       transition: width 0.3s;
     }
     .upload-status {
@@ -240,37 +233,36 @@
     }
     .status-uploading { background: var(--purple); color: #fff; }
     .status-complete { background: var(--green); color: #fff; }
-    .status-pending { background: var(--surface); color: var(--text-dim); border: 1px solid var(--border); }
     
-    /* Earnings */
-    .earnings-total {
-      text-align: center;
-      padding: 24px;
-      background: linear-gradient(135deg, rgba(168,85,247,0.2), rgba(6,214,160,0.2));
-      border-radius: 12px;
-      margin-bottom: 16px;
+    /* Schedule */
+    .schedule-day {
+      background: var(--surface2);
+      border-radius: 10px;
+      padding: 14px;
+      margin-bottom: 10px;
     }
-    .earnings-amount {
-      font-size: 48px;
-      font-weight: 800;
-      background: linear-gradient(135deg, var(--purple), var(--teal));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+    .schedule-day.today {
+      border: 1px solid var(--purple);
+      background: rgba(168, 85, 247, 0.1);
     }
-    .earnings-label { font-size: 14px; color: var(--text-dim); }
-    
-    .payout-item {
+    .schedule-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 12px 0;
-      border-bottom: 1px solid var(--border);
+      margin-bottom: 6px;
     }
-    .payout-item:last-child { border-bottom: none; }
-    .payout-date { font-size: 13px; color: var(--text-dim); }
-    .payout-desc { font-size: 14px; font-weight: 500; }
-    .payout-amount { font-weight: 700; color: var(--green); }
-    .payout-pending { color: var(--gold); }
+    .schedule-date { font-weight: 700; font-size: 15px; }
+    .schedule-badge {
+      font-size: 10px;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-weight: 600;
+    }
+    .badge-today { background: var(--purple); color: #fff; }
+    .badge-upcoming { background: var(--surface); color: var(--text-dim); border: 1px solid var(--border); }
+    .badge-complete { background: var(--green); color: #fff; }
+    .schedule-desc { font-size: 13px; color: var(--text-dim); }
+    .schedule-time { font-size: 12px; color: var(--teal); margin-top: 4px; }
     
     /* Resources Grid */
     .resource-grid {
@@ -297,181 +289,94 @@
     .resource-name { font-size: 13px; font-weight: 600; }
     .resource-size { font-size: 11px; color: var(--text-dim); }
     
-    /* Schedule */
-    .schedule-day {
+    /* Contact Card */
+    .contact-card {
       background: var(--surface2);
       border-radius: 10px;
-      padding: 14px;
-      margin-bottom: 10px;
-    }
-    .schedule-header {
+      padding: 16px;
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      margin-bottom: 8px;
+      gap: 12px;
     }
-    .schedule-date { font-weight: 700; }
-    .schedule-pay { color: var(--green); font-weight: 600; font-size: 14px; }
-    .schedule-desc { font-size: 13px; color: var(--text-dim); }
-    .schedule-type {
-      display: inline-block;
-      padding: 2px 8px;
-      border-radius: 4px;
-      font-size: 11px;
-      font-weight: 600;
-      margin-top: 6px;
-    }
-    .type-full { background: var(--purple); color: #fff; }
-    .type-broll { background: var(--teal); color: #000; }
-    
-    /* Button */
-    .btn {
-      display: inline-flex;
+    .contact-icon {
+      width: 48px;
+      height: 48px;
+      background: var(--purple);
+      border-radius: 50%;
+      display: flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
-      padding: 14px 24px;
-      border-radius: 10px;
-      font-size: 15px;
-      font-weight: 600;
-      cursor: pointer;
-      border: none;
-      transition: all 0.2s;
-      text-decoration: none;
+      font-size: 24px;
     }
-    .btn-primary {
-      background: linear-gradient(135deg, var(--purple), var(--pink));
-      color: white;
-      width: 100%;
-    }
-    .btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
-    .btn-secondary {
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      color: var(--text);
-    }
+    .contact-info h4 { font-size: 14px; }
+    .contact-info p { font-size: 12px; color: var(--text-dim); }
+    .contact-info a { color: var(--teal); text-decoration: none; font-weight: 600; }
     
-    /* Tips */
+    /* Tip Card */
     .tip-card {
       background: linear-gradient(135deg, rgba(251,191,36,0.15), rgba(249,115,22,0.15));
       border: 1px solid rgba(251,191,36,0.3);
       border-radius: 10px;
       padding: 14px;
+      margin-top: 16px;
     }
     .tip-card h4 { color: var(--gold); font-size: 14px; margin-bottom: 6px; }
     .tip-card p { font-size: 13px; color: var(--text-dim); }
     
-    /* Leaderboard */
-    .leaderboard-item {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 12px;
-      background: var(--surface2);
-      border-radius: 8px;
-      margin-bottom: 8px;
-    }
-    .lb-rank {
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 800;
-      font-size: 14px;
-    }
-    .rank-1 { background: var(--gold); color: #000; }
-    .rank-2 { background: #c0c0c0; color: #000; }
-    .rank-3 { background: #cd7f32; color: #fff; }
-    .rank-other { background: var(--border); color: var(--text-dim); }
-    .lb-name { flex: 1; font-weight: 600; font-size: 14px; }
-    .lb-venue { font-size: 11px; color: var(--text-dim); }
-    .lb-views { font-weight: 700; color: var(--teal); }
-    
-    /* Settings */
-    .setting-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 14px 0;
-      border-bottom: 1px solid var(--border);
-    }
-    .setting-row:last-child { border-bottom: none; }
-    .setting-label { font-size: 14px; }
-    .setting-value { font-size: 14px; color: var(--text-dim); }
-    
-    /* Hidden */
-    .hidden { display: none !important; }
-    
     /* Mobile */
     @media (max-width: 480px) {
-      .stats-row { grid-template-columns: repeat(3, 1fr); gap: 8px; }
-      .stat-card { padding: 12px 8px; }
-      .stat-value { font-size: 22px; }
-      .resource-grid { grid-template-columns: 1fr 1fr; }
+      .resource-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+      .resource-card { padding: 16px 12px; }
     }
   </style>
 </head>
 <body>
   <!-- Splash Screen -->
   <div id="splash">
-    <img src="creator-logo.png" alt="Content Creator Portal" onerror="this.parentElement.classList.add('hidden')">
+    <img src="creator-logo.png" alt="Creator Portal" onerror="this.parentElement.classList.add('hidden')">
   </div>
   
   <!-- Header -->
   <div class="header">
     <h1>🎬 Creator Portal</h1>
     <p>The Light Park Content Team</p>
-    <div class="venue-badge" id="venueBadge">📍 Katy, TX</div>
-  </div>
-  
-  <!-- Stats -->
-  <div class="stats-row">
-    <div class="stat-card">
-      <div class="stat-value" id="statVideos">12</div>
-      <div class="stat-label">Videos</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-value" id="statViews">47K</div>
-      <div class="stat-label">Total Views</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-value" id="statEarned">$1,850</div>
-      <div class="stat-label">Earned</div>
-    </div>
+    <select class="venue-select" id="venueSelect">
+      <option value="katy">📍 Katy</option>
+      <option value="spring">📍 Spring</option>
+      <option value="selma">📍 Selma</option>
+      <option value="missions">📍 Missions</option>
+      <option value="arlington">📍 Arlington</option>
+      <option value="frisco">📍 Frisco</option>
+      <option value="round-rock">📍 Round Rock</option>
+      <option value="okc">📍 Oklahoma City</option>
+    </select>
   </div>
   
   <!-- Tabs -->
   <div class="tabs">
-    <button class="tab active" data-tab="today">Today</button>
-    <button class="tab" data-tab="upload">Upload</button>
-    <button class="tab" data-tab="earnings">Earnings</button>
-    <button class="tab" data-tab="resources">Resources</button>
-    <button class="tab" data-tab="schedule">Schedule</button>
+    <button class="tab active" data-tab="today">📋 Today</button>
+    <button class="tab" data-tab="upload">📤 Upload</button>
+    <button class="tab" data-tab="schedule">📅 Schedule</button>
+    <button class="tab" data-tab="resources">📦 Resources</button>
   </div>
   
   <!-- TODAY TAB -->
   <div class="tab-content active" id="tab-today">
+    <div class="day-info">
+      <h3>Build Day 3</h3>
+      <p>Props come alive! Focus on first power-ups and reactions.</p>
+    </div>
+    
     <div class="section">
-      <div class="section-title"><span class="emoji">🎬</span> Today's Shot List</div>
-      <p style="font-size:13px;color:var(--text-dim);margin-bottom:12px;">Build Day 3 — Props come alive! ⭐ = Hero shots for socials.</p>
+      <div class="section-title"><span class="emoji">🎬</span> Shot List</div>
+      <p style="font-size:12px;color:var(--text-dim);margin-bottom:12px;">Check off shots as you capture them. ⭐ = Priority hero shots.</p>
       
-      <div id="shotList">
-        <!-- Populated by JS -->
-      </div>
+      <div id="shotList"></div>
     </div>
     
     <div class="tip-card">
       <h4>💡 Pro Tip</h4>
       <p>Golden hour is 6-7pm today. Get those silhouette shots of the crew with structures backlit!</p>
-    </div>
-    
-    <div class="section" style="margin-top:16px;">
-      <div class="section-title"><span class="emoji">🏆</span> This Week's Leaderboard</div>
-      <div id="leaderboard">
-        <!-- Populated by JS -->
-      </div>
     </div>
   </div>
   
@@ -483,8 +388,8 @@
       <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()">
         <div class="icon">📹</div>
         <h3>Tap to Upload</h3>
-        <p>Video, photo, or batch upload</p>
-        <p style="margin-top:8px;font-size:11px;color:var(--purple);">Supports MP4, MOV, JPG, PNG</p>
+        <p>Video or photo files</p>
+        <p style="margin-top:8px;font-size:11px;color:var(--purple);">MP4, MOV, JPG, PNG • Max 500MB</p>
       </div>
       <input type="file" id="fileInput" multiple accept="video/*,image/*" style="display:none">
       
@@ -492,99 +397,99 @@
     </div>
     
     <div class="section">
-      <div class="section-title"><span class="emoji">📋</span> Recent Uploads</div>
+      <div class="section-title"><span class="emoji">✅</span> Recent Uploads</div>
       <div id="recentUploads">
         <div class="upload-item">
-          <img class="upload-thumb" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='40' fill='%232a2f42'%3E%3Crect width='60' height='40'/%3E%3Ctext x='30' y='24' text-anchor='middle' fill='%238888a0' font-size='10'%3E🎬%3C/text%3E%3C/svg%3E">
+          <div class="upload-thumb">🎬</div>
           <div class="upload-info">
-            <div class="upload-name">RGB_Tunnel_Timelapse.mp4</div>
-            <div class="upload-meta">Uploaded 2 hours ago • 124MB</div>
+            <div class="upload-name">RGB_Tunnel_FirstLight.mp4</div>
+            <div class="upload-meta">Today 2:34pm • 124MB</div>
           </div>
-          <span class="upload-status status-complete">✓ Live</span>
+          <span class="upload-status status-complete">✓ Sent</span>
         </div>
         <div class="upload-item">
-          <img class="upload-thumb" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='40' fill='%232a2f42'%3E%3Crect width='60' height='40'/%3E%3Ctext x='30' y='24' text-anchor='middle' fill='%238888a0' font-size='10'%3E📸%3C/text%3E%3C/svg%3E">
+          <div class="upload-thumb">📸</div>
           <div class="upload-info">
-            <div class="upload-name">Crew_Golden_Hour_Batch.zip</div>
-            <div class="upload-meta">Uploaded yesterday • 892MB • 24 photos</div>
+            <div class="upload-name">Crew_Lunch_Break.jpg</div>
+            <div class="upload-meta">Today 12:15pm • 4.2MB</div>
           </div>
-          <span class="upload-status status-complete">✓ Live</span>
+          <span class="upload-status status-complete">✓ Sent</span>
         </div>
       </div>
     </div>
   </div>
   
-  <!-- EARNINGS TAB -->
-  <div class="tab-content" id="tab-earnings">
-    <div class="earnings-total">
-      <div class="earnings-amount">$1,850</div>
-      <div class="earnings-label">Total Earned This Season</div>
+  <!-- SCHEDULE TAB -->
+  <div class="tab-content" id="tab-schedule">
+    <div class="section">
+      <div class="section-title"><span class="emoji">📅</span> Your Schedule</div>
+      
+      <div id="scheduleList">
+        <div class="schedule-day">
+          <div class="schedule-header">
+            <span class="schedule-date">Mon, Oct 7</span>
+            <span class="schedule-badge badge-complete">✓ Complete</span>
+          </div>
+          <div class="schedule-desc">Build Day 1 — Foundation & infrastructure</div>
+          <div class="schedule-time">8:00 AM - 6:00 PM</div>
+        </div>
+        
+        <div class="schedule-day">
+          <div class="schedule-header">
+            <span class="schedule-date">Tue, Oct 8</span>
+            <span class="schedule-badge badge-complete">✓ Complete</span>
+          </div>
+          <div class="schedule-desc">Build Day 2 — Structures rise</div>
+          <div class="schedule-time">8:00 AM - 6:00 PM</div>
+        </div>
+        
+        <div class="schedule-day today">
+          <div class="schedule-header">
+            <span class="schedule-date">Wed, Oct 9</span>
+            <span class="schedule-badge badge-today">TODAY</span>
+          </div>
+          <div class="schedule-desc">Build Day 3 — Props come alive</div>
+          <div class="schedule-time">8:00 AM - 6:00 PM</div>
+        </div>
+        
+        <div class="schedule-day">
+          <div class="schedule-header">
+            <span class="schedule-date">Thu, Oct 10</span>
+            <span class="schedule-badge badge-upcoming">Upcoming</span>
+          </div>
+          <div class="schedule-desc">Build Day 4 — Detail work & testing</div>
+          <div class="schedule-time">8:00 AM - 6:00 PM</div>
+        </div>
+        
+        <div class="schedule-day" style="opacity:0.7;">
+          <div class="schedule-header">
+            <span class="schedule-date">Mon, Oct 14</span>
+            <span class="schedule-badge badge-upcoming">Upcoming</span>
+          </div>
+          <div class="schedule-desc">B-Roll Visit — Capture progress</div>
+          <div class="schedule-time">2:00 PM - 5:00 PM</div>
+        </div>
+        
+        <div class="schedule-day" style="opacity:0.7;">
+          <div class="schedule-header">
+            <span class="schedule-date">Thu, Nov 14</span>
+            <span class="schedule-badge badge-upcoming">Upcoming</span>
+          </div>
+          <div class="schedule-desc">🎉 Opening Night</div>
+          <div class="schedule-time">4:00 PM - 10:00 PM</div>
+        </div>
+      </div>
     </div>
     
     <div class="section">
-      <div class="section-title"><span class="emoji">📅</span> Payment History</div>
-      <div id="paymentHistory">
-        <div class="payout-item">
-          <div>
-            <div class="payout-desc">Build Week 1 (Oct 7-11)</div>
-            <div class="payout-date">Paid Oct 15</div>
-          </div>
-          <div class="payout-amount">+$800</div>
+      <div class="section-title"><span class="emoji">📞</span> Contact</div>
+      <div class="contact-card">
+        <div class="contact-icon">👤</div>
+        <div class="contact-info">
+          <h4>Venue Manager</h4>
+          <p>Questions about schedule or location</p>
+          <a href="tel:+18005551234">Call or Text</a>
         </div>
-        <div class="payout-item">
-          <div>
-            <div class="payout-desc">B-Roll Visit (Oct 14)</div>
-            <div class="payout-date">Paid Oct 15</div>
-          </div>
-          <div class="payout-amount">+$75</div>
-        </div>
-        <div class="payout-item">
-          <div>
-            <div class="payout-desc">Build Week 2 (Oct 15-18)</div>
-            <div class="payout-date">Paid Oct 22</div>
-          </div>
-          <div class="payout-amount">+$800</div>
-        </div>
-        <div class="payout-item">
-          <div>
-            <div class="payout-desc">B-Roll Visit (Oct 21)</div>
-            <div class="payout-date">Paid Oct 22</div>
-          </div>
-          <div class="payout-amount">+$75</div>
-        </div>
-        <div class="payout-item">
-          <div>
-            <div class="payout-desc">Opening Night (Nov 14)</div>
-            <div class="payout-date">Pending</div>
-          </div>
-          <div class="payout-amount payout-pending">+$200</div>
-        </div>
-      </div>
-    </div>
-    
-    <div class="section">
-      <div class="section-title"><span class="emoji">🎁</span> Bonuses</div>
-      <p style="font-size:13px;color:var(--text-dim);margin-bottom:12px;">Earn extra for viral content!</p>
-      <div class="payout-item">
-        <div>
-          <div class="payout-desc">10K Views Bonus</div>
-          <div class="payout-date">RGB Tunnel video hit 10K!</div>
-        </div>
-        <div class="payout-amount">+$50</div>
-      </div>
-      <div class="payout-item" style="opacity:0.5;">
-        <div>
-          <div class="payout-desc">50K Views Bonus</div>
-          <div class="payout-date">Get 50K views on any video</div>
-        </div>
-        <div class="payout-amount payout-pending">+$200</div>
-      </div>
-      <div class="payout-item" style="opacity:0.5;">
-        <div>
-          <div class="payout-desc">Viral Hit Bonus</div>
-          <div class="payout-date">Get 100K+ views</div>
-        </div>
-        <div class="payout-amount payout-pending">+$500</div>
       </div>
     </div>
   </div>
@@ -597,7 +502,7 @@
         <a href="#" class="resource-card">
           <div class="resource-icon">🎨</div>
           <div class="resource-name">Logo Pack</div>
-          <div class="resource-size">PNG, SVG • 12MB</div>
+          <div class="resource-size">PNG, SVG</div>
         </a>
         <a href="#" class="resource-card">
           <div class="resource-icon">🎵</div>
@@ -644,84 +549,30 @@
     </div>
     
     <div class="section">
-      <div class="section-title"><span class="emoji">🎥</span> Equipment Info</div>
-      <div class="setting-row">
-        <span class="setting-label">GoPro Hero 12</span>
-        <span class="setting-value">Assigned to you</span>
+      <div class="section-title"><span class="emoji">🎥</span> Your Equipment</div>
+      <div class="upload-item">
+        <div class="upload-thumb">📹</div>
+        <div class="upload-info">
+          <div class="upload-name">GoPro Hero 12</div>
+          <div class="upload-meta">Assigned to you • Return at end of season</div>
+        </div>
       </div>
-      <div class="setting-row">
-        <span class="setting-label">Gimbal</span>
-        <span class="setting-value">DJI OM 6</span>
+      <div class="upload-item">
+        <div class="upload-thumb">🎤</div>
+        <div class="upload-info">
+          <div class="upload-name">Rode Wireless GO</div>
+          <div class="upload-meta">Clip-on mic for interviews</div>
+        </div>
       </div>
-      <div class="setting-row">
-        <span class="setting-label">Mic</span>
-        <span class="setting-value">Rode Wireless GO</span>
+      <div class="upload-item">
+        <div class="upload-thumb">📱</div>
+        <div class="upload-info">
+          <div class="upload-name">DJI OM 6 Gimbal</div>
+          <div class="upload-meta">For smooth phone footage</div>
+        </div>
       </div>
-      <p style="font-size:12px;color:var(--text-dim);margin-top:12px;">Equipment issues? Text your venue manager or submit a help ticket.</p>
+      <p style="font-size:12px;color:var(--text-dim);margin-top:12px;">Equipment issues? Contact your venue manager.</p>
     </div>
-  </div>
-  
-  <!-- SCHEDULE TAB -->
-  <div class="tab-content" id="tab-schedule">
-    <div class="section">
-      <div class="section-title"><span class="emoji">📆</span> Your Schedule</div>
-      <p style="font-size:13px;color:var(--text-dim);margin-bottom:16px;">Tap a day to see details. Contact your venue manager for changes.</p>
-      
-      <div id="scheduleList">
-        <div class="schedule-day">
-          <div class="schedule-header">
-            <span class="schedule-date">Mon, Oct 7</span>
-            <span class="schedule-pay">$200</span>
-          </div>
-          <div class="schedule-desc">Build Day 1 — Foundation & infrastructure</div>
-          <span class="schedule-type type-full">Full Day</span>
-        </div>
-        <div class="schedule-day">
-          <div class="schedule-header">
-            <span class="schedule-date">Tue, Oct 8</span>
-            <span class="schedule-pay">$200</span>
-          </div>
-          <div class="schedule-desc">Build Day 2 — Structures rise</div>
-          <span class="schedule-type type-full">Full Day</span>
-        </div>
-        <div class="schedule-day">
-          <div class="schedule-header">
-            <span class="schedule-date">Wed, Oct 9</span>
-            <span class="schedule-pay">$200</span>
-          </div>
-          <div class="schedule-desc">Build Day 3 — Props come alive</div>
-          <span class="schedule-type type-full">Full Day</span>
-        </div>
-        <div class="schedule-day">
-          <div class="schedule-header">
-            <span class="schedule-date">Thu, Oct 10</span>
-            <span class="schedule-pay">$200</span>
-          </div>
-          <div class="schedule-desc">Build Day 4 — Detail work & testing</div>
-          <span class="schedule-type type-full">Full Day</span>
-        </div>
-        <div class="schedule-day" style="opacity:0.6;">
-          <div class="schedule-header">
-            <span class="schedule-date">Mon, Oct 14</span>
-            <span class="schedule-pay">$75</span>
-          </div>
-          <div class="schedule-desc">B-Roll visit — Capture any changes</div>
-          <span class="schedule-type type-broll">B-Roll</span>
-        </div>
-        <div class="schedule-day" style="opacity:0.6;">
-          <div class="schedule-header">
-            <span class="schedule-date">Thu, Nov 14</span>
-            <span class="schedule-pay">$200</span>
-          </div>
-          <div class="schedule-desc">🎉 Opening Night — VIP & crowd content</div>
-          <span class="schedule-type type-full">Full Day</span>
-        </div>
-      </div>
-    </div>
-    
-    <a href="tel:+18005551234" class="btn btn-secondary" style="margin-top:8px;">
-      📞 Contact Venue Manager
-    </a>
   </div>
   
   <script>
@@ -740,10 +591,10 @@
       { title: "RGB Tunnel with lights ON", desc: "First time powered up! Get reactions.", priority: "hero", done: false },
       { title: "20' Christmas Tree lighting test", desc: "Capture the moment it turns on", priority: "hero", done: false },
       { title: "Crew installing pixel strings", desc: "Close-up of hands working", priority: "high", done: true },
-      { title: "Forklift moving large prop", desc: "Wide shot showing scale", priority: "normal", done: true },
-      { title: "Tool organization / staging area", desc: "Clean, organized workspace shots", priority: "normal", done: false },
+      { title: "Forklift moving large prop", desc: "Wide shot showing scale", priority: null, done: true },
+      { title: "Tool organization / staging area", desc: "Clean, organized workspace shots", priority: null, done: false },
       { title: "Golden hour crew silhouettes", desc: "6-7pm, backlit by sunset", priority: "hero", done: false },
-      { title: "Day-to-night timelapse setup", desc: "Set camera before 5pm", priority: "high", done: false },
+      { title: "Day-to-night timelapse", desc: "Set camera on tripod before 5pm", priority: "high", done: false },
     ];
     
     // Render shot list
@@ -756,7 +607,8 @@
             <div class="shot-title">${shot.title}</div>
             <div class="shot-desc">${shot.desc}</div>
           </div>
-          <span class="shot-priority priority-${shot.priority}">${shot.priority === 'hero' ? '⭐ HERO' : shot.priority === 'high' ? 'HIGH' : ''}</span>
+          ${shot.priority === 'hero' ? '<span class="shot-priority priority-hero">⭐ HERO</span>' : 
+            shot.priority === 'high' ? '<span class="shot-priority priority-high">HIGH</span>' : ''}
         </div>
       `).join('');
     }
@@ -764,66 +616,30 @@
     function toggleShot(index) {
       todayShots[index].done = !todayShots[index].done;
       renderShotList();
-      // Save to localStorage
-      localStorage.setItem('creatorShots', JSON.stringify(todayShots));
+      localStorage.setItem('creatorShots_' + document.getElementById('venueSelect').value, JSON.stringify(todayShots));
     }
     
-    // Leaderboard
-    const leaderboard = [
-      { name: "Sarah M.", venue: "Frisco", views: "89K" },
-      { name: "You", venue: "Katy", views: "47K" },
-      { name: "Marcus T.", venue: "Arlington", views: "42K" },
-      { name: "Jessica R.", venue: "Spring", views: "38K" },
-      { name: "David L.", venue: "Round Rock", views: "31K" },
-    ];
-    
-    function renderLeaderboard() {
-      const container = document.getElementById('leaderboard');
-      container.innerHTML = leaderboard.map((person, i) => `
-        <div class="leaderboard-item" ${person.name === 'You' ? 'style="border: 1px solid var(--purple);"' : ''}>
-          <div class="lb-rank ${i === 0 ? 'rank-1' : i === 1 ? 'rank-2' : i === 2 ? 'rank-3' : 'rank-other'}">${i + 1}</div>
-          <div style="flex:1;">
-            <div class="lb-name">${person.name}</div>
-            <div class="lb-venue">${person.venue}</div>
-          </div>
-          <div class="lb-views">${person.views}</div>
-        </div>
-      `).join('');
-    }
-    
-    // File upload handling
+    // File upload
     const uploadZone = document.getElementById('uploadZone');
     const fileInput = document.getElementById('fileInput');
     const uploadQueue = document.getElementById('uploadQueue');
     
     ['dragenter', 'dragover'].forEach(e => {
-      uploadZone.addEventListener(e, (ev) => {
-        ev.preventDefault();
-        uploadZone.classList.add('dragover');
-      });
+      uploadZone.addEventListener(e, (ev) => { ev.preventDefault(); uploadZone.classList.add('dragover'); });
     });
-    
     ['dragleave', 'drop'].forEach(e => {
-      uploadZone.addEventListener(e, (ev) => {
-        ev.preventDefault();
-        uploadZone.classList.remove('dragover');
-      });
+      uploadZone.addEventListener(e, (ev) => { ev.preventDefault(); uploadZone.classList.remove('dragover'); });
     });
     
-    uploadZone.addEventListener('drop', (e) => {
-      handleFiles(e.dataTransfer.files);
-    });
-    
-    fileInput.addEventListener('change', () => {
-      handleFiles(fileInput.files);
-    });
+    uploadZone.addEventListener('drop', (e) => handleFiles(e.dataTransfer.files));
+    fileInput.addEventListener('change', () => handleFiles(fileInput.files));
     
     function handleFiles(files) {
       Array.from(files).forEach(file => {
         const item = document.createElement('div');
         item.className = 'upload-item';
         item.innerHTML = `
-          <img class="upload-thumb" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='40' fill='%232a2f42'%3E%3Crect width='60' height='40'/%3E%3Ctext x='30' y='24' text-anchor='middle' fill='%238888a0' font-size='10'%3E${file.type.startsWith('video') ? '🎬' : '📸'}%3C/text%3E%3C/svg%3E">
+          <div class="upload-thumb">${file.type.startsWith('video') ? '🎬' : '📸'}</div>
           <div class="upload-info">
             <div class="upload-name">${file.name}</div>
             <div class="upload-meta">${(file.size / 1024 / 1024).toFixed(1)}MB</div>
@@ -833,31 +649,37 @@
         `;
         uploadQueue.appendChild(item);
         
-        // Simulate upload progress
-        const progressBar = item.querySelector('.upload-progress-bar');
+        // Simulate upload
+        const bar = item.querySelector('.upload-progress-bar');
         const status = item.querySelector('.upload-status');
         let progress = 0;
         const interval = setInterval(() => {
-          progress += Math.random() * 20;
+          progress += Math.random() * 25;
           if (progress >= 100) {
             progress = 100;
             clearInterval(interval);
-            status.textContent = '✓ Complete';
+            status.textContent = '✓ Sent';
             status.className = 'upload-status status-complete';
           }
-          progressBar.style.width = progress + '%';
-        }, 500);
+          bar.style.width = progress + '%';
+        }, 400);
       });
     }
     
-    // Initialize
-    renderShotList();
-    renderLeaderboard();
+    // Venue change
+    document.getElementById('venueSelect').addEventListener('change', (e) => {
+      localStorage.setItem('creatorVenue', e.target.value);
+    });
     
-    // Splash screen
-    setTimeout(() => {
-      document.getElementById('splash').classList.add('hidden');
-    }, 1500);
+    // Load saved venue
+    const savedVenue = localStorage.getItem('creatorVenue');
+    if (savedVenue) document.getElementById('venueSelect').value = savedVenue;
+    
+    // Init
+    renderShotList();
+    
+    // Splash
+    setTimeout(() => document.getElementById('splash').classList.add('hidden'), 1200);
   </script>
 </body>
 </html>
