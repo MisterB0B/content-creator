@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
-<head><script>const TLP_SUPABASE_URL='https://gwjtfcrgpxclixonogpe.supabase.co';const TLP_SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd3anRmY3JncHhjbGl4b25vZ3BlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAzMzQzOTUsImV4cCI6MjA4NTkxMDM5NX0.qM1-_VA1Dsx_nsWkeoAJvNWNgSuuwApPBGoJU32X3-I';const APP_NAME='content_creator';window.CloudSync={online:navigator.onLine,async save(k,d){localStorage.setItem(APP_NAME+'_'+k,JSON.stringify(d));if(!this.online)return{synced:false};try{const e=await fetch(TLP_SUPABASE_URL+'/rest/v1/app_data?app_data=eq.'+APP_NAME+'&data_key=eq.'+k+'&select=id',{headers:{apikey:TLP_SUPABASE_KEY,Authorization:'Bearer '+TLP_SUPABASE_KEY}}).then(r=>r.json());const m=e.length>0?'PATCH':'POST';const u=e.length>0?TLP_SUPABASE_URL+'/rest/v1/app_data?id=eq.'+e[0].id:TLP_SUPABASE_URL+'/rest/v1/app_data';await fetch(u,{method:m,headers:{apikey:TLP_SUPABASE_KEY,Authorization:'Bearer '+TLP_SUPABASE_KEY,'Content-Type':'application/json'},body:JSON.stringify(e.length>0?{data:d}:{app_data:APP_NAME,data_key:k,data:d})});return{synced:true};}catch(x){return{synced:false};}},async load(k){if(this.online){try{const r=await fetch(TLP_SUPABASE_URL+'/rest/v1/app_data?app_data=eq.'+APP_NAME+'&data_key=eq.'+k+'&select=data',{headers:{apikey:TLP_SUPABASE_KEY,Authorization:'Bearer '+TLP_SUPABASE_KEY}}).then(r=>r.json());if(r.length>0){localStorage.setItem(APP_NAME+'_'+k,JSON.stringify(r[0].data));return r[0].data;}}catch(x){}}const l=localStorage.getItem(APP_NAME+'_'+k);return l?JSON.parse(l):null;}};window.addEventListener('online',()=>CloudSync.online=true);window.addEventListener('offline',()=>CloudSync.online=false);</script>
+<head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <!-- Unified Cloud Sync -->
-    <script src="https://thelightparkops.com/shared/cloud-sync.js"></script>
+    <script src="/shared/cloud-sync.js?v=20260211h"></script>
     <title>Creator Portal | The Light Park</title>
   <link rel="manifest" href="manifest.json">
   <style>
@@ -331,10 +331,9 @@
       .resource-card { padding: 16px 12px; }
     }
   </style>
-  <script src="supabase-sync.js"></script>
-  <script src="https://thelightparkops.com/shared/supabase-auth.js?v=20260211f"></script>
-  <script src="https://thelightparkops.com/shared/activity-logger.js?v=20260211f"></script>
-  <script src="https://thelightparkops.com/shared/auth-gate.js?v=20260211f" data-app="Content Creator" data-icon="🎬"></script>
+  <script src="/shared/supabase-auth.js?v=20260211f"></script>
+  <script src="/shared/activity-logger.js?v=20260211f"></script>
+  <script src="/shared/auth-gate.js?v=20260211f" data-app="Content Creator" data-icon="🎬"></script>
 </head>
 <body>
   <!-- Splash Screen -->
@@ -345,7 +344,6 @@
   <!-- Header -->
   <div class="header" style="position: relative; padding-top: 50px;">
       <a href="https://thelightparkops.com" style="position: absolute; top: 20px; left: 20px; color: #a855f7; text-decoration: none; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 6px; transition: all 0.2s; z-index: 10;" onmouseover="this.style.color='#06d6a0'" onmouseout="this.style.color='#a855f7'">
-        ← Dashboard
       </a>
     <img src="creator-logo.png?v=2" alt="Content Creator" style="max-height:60px;margin-bottom:8px;">
     <p>The Light Park Content Team</p>
@@ -585,6 +583,53 @@
   </div>
   
   <script>
+    // Cloud-first data sync
+    const dataSync = new TLPDataSync('content_creator');
+    let todayShots = [
+      { title: "RGB Tunnel with lights ON", desc: "First time powered up! Get reactions.", priority: "hero", done: false },
+      { title: "20' Christmas Tree lighting test", desc: "Capture the moment it turns on", priority: "hero", done: false },
+      { title: "Crew installing pixel strings", desc: "Close-up of hands working", priority: "high", done: true },
+      { title: "Forklift moving large prop", desc: "Wide shot showing scale", priority: null, done: true },
+      { title: "Tool organization / staging area", desc: "Clean, organized workspace shots", priority: null, done: false },
+      { title: "Golden hour crew silhouettes", desc: "6-7pm, backlit by sunset", priority: "hero", done: false },
+      { title: "Day-to-night timelapse", desc: "Set camera on tripod before 5pm", priority: "high", done: false },
+    ];
+    
+    // Load shots from cloud on init
+    async function loadShots() {
+      const venue = document.getElementById('venueSelect').value;
+      try {
+        const cloudData = await dataSync.load('shots_' + venue);
+        if (cloudData && Array.isArray(cloudData)) {
+          todayShots = cloudData;
+          console.log('[Content Creator] ✓ Loaded shots from cloud');
+        }
+      } catch (e) {
+        console.warn('[Content Creator] Cloud load failed, using defaults:', e);
+        // Fallback to localStorage
+        const local = localStorage.getItem('creatorShots_' + venue);
+        if (local) {
+          todayShots = JSON.parse(local);
+        }
+      }
+      renderShotList();
+    }
+    
+    // Save shots to cloud
+    async function saveShots() {
+      const venue = document.getElementById('venueSelect').value;
+      try {
+        await dataSync.save('shots_' + venue, todayShots);
+        // Also cache locally
+        localStorage.setItem('creatorShots_' + venue, JSON.stringify(todayShots));
+        console.log('[Content Creator] ✓ Shots synced');
+      } catch (e) {
+        console.error('[Content Creator] Save failed:', e);
+        // Fallback to localStorage
+        localStorage.setItem('creatorShots_' + venue, JSON.stringify(todayShots));
+      }
+    }
+    
     // Tab navigation
     document.querySelectorAll('.tab').forEach(tab => {
       tab.addEventListener('click', () => {
@@ -594,17 +639,6 @@
         document.getElementById('tab-' + tab.dataset.tab).classList.add('active');
       });
     });
-    
-    // Shot list data
-    const todayShots = [
-      { title: "RGB Tunnel with lights ON", desc: "First time powered up! Get reactions.", priority: "hero", done: false },
-      { title: "20' Christmas Tree lighting test", desc: "Capture the moment it turns on", priority: "hero", done: false },
-      { title: "Crew installing pixel strings", desc: "Close-up of hands working", priority: "high", done: true },
-      { title: "Forklift moving large prop", desc: "Wide shot showing scale", priority: null, done: true },
-      { title: "Tool organization / staging area", desc: "Clean, organized workspace shots", priority: null, done: false },
-      { title: "Golden hour crew silhouettes", desc: "6-7pm, backlit by sunset", priority: "hero", done: false },
-      { title: "Day-to-night timelapse", desc: "Set camera on tripod before 5pm", priority: "high", done: false },
-    ];
     
     // Render shot list
     function renderShotList() {
@@ -622,10 +656,10 @@
       `).join('');
     }
     
-    function toggleShot(index) {
+    async function toggleShot(index) {
       todayShots[index].done = !todayShots[index].done;
       renderShotList();
-      localStorage.setItem('creatorShots_' + document.getElementById('venueSelect').value, JSON.stringify(todayShots));
+      await saveShots();
     }
     
     // File upload
@@ -643,8 +677,15 @@
     uploadZone.addEventListener('drop', (e) => handleFiles(e.dataTransfer.files));
     fileInput.addEventListener('change', () => handleFiles(fileInput.files));
     
+    // Handle file uploads - Upload to Supabase Storage (NOT as base64 in database!)
     function handleFiles(files) {
-      Array.from(files).forEach(file => {
+      Array.from(files).forEach(async (file) => {
+        // Validate file size (max 500MB)
+        if (file.size > 500 * 1024 * 1024) {
+          alert(`File too large: ${file.name} (max 500MB)`);
+          return;
+        }
+        
         const item = document.createElement('div');
         item.className = 'upload-item';
         item.innerHTML = `
@@ -658,37 +699,83 @@
         `;
         uploadQueue.appendChild(item);
         
-        // Simulate upload
         const bar = item.querySelector('.upload-progress-bar');
         const status = item.querySelector('.upload-status');
-        let progress = 0;
-        const interval = setInterval(() => {
-          progress += Math.random() * 25;
-          if (progress >= 100) {
-            progress = 100;
-            clearInterval(interval);
-            status.textContent = '✓ Sent';
-            status.className = 'upload-status status-complete';
-          }
-          bar.style.width = progress + '%';
-        }, 400);
+        
+        try {
+          // Upload file to Supabase Storage bucket (training-media)
+          // Uses shared TLPDataSync.uploadFile() - stores file in bucket, NOT in database
+          const venue = document.getElementById('venueSelect').value;
+          const result = await dataSync.uploadFile(
+            file, 
+            'training-media',  // Bucket name
+            (progress) => { bar.style.width = progress + '%'; },  // Progress callback
+            venue  // Folder path: training-media/katy/timestamp_filename.mp4
+          );
+          
+          // Save METADATA ONLY to database (URL/path, NOT the file itself)
+          const uploadRecord = {
+            filename: file.name,
+            fileUrl: result.url,        // ← Store URL in database
+            filePath: result.path,      // ← Store path in database
+            bucket: result.bucket,      // ← Store bucket name in database
+            fileSize: file.size,
+            fileType: file.type,
+            venue: venue,
+            uploadedAt: new Date().toISOString()
+          };
+          
+          // Load existing uploads metadata
+          let uploads = await dataSync.load('uploads') || [];
+          uploads.push(uploadRecord);
+          
+          // Save metadata to cloud (database stores URLs only, not files)
+          await dataSync.save('uploads', uploads);
+          
+          // Update UI
+          status.textContent = '✓ Uploaded';
+          status.className = 'upload-status status-complete';
+          
+          console.log('[Content Creator] ✓ File uploaded to Storage:', result.url);
+        } catch (e) {
+          console.error('[Content Creator] Upload failed:', e);
+          status.textContent = '✗ Failed';
+          status.className = 'upload-status status-complete';
+          status.style.background = '#ef4444';
+          alert(`Upload failed: ${e.message}`);
+        }
       });
     }
     
-    // Venue change
-    document.getElementById('venueSelect').addEventListener('change', (e) => {
-      localStorage.setItem('creatorVenue', e.target.value);
+    // Venue change - reload shots for new venue
+    document.getElementById('venueSelect').addEventListener('change', async (e) => {
+      const venue = e.target.value;
+      await dataSync.save('venue', venue); // Save selected venue
+      localStorage.setItem('creatorVenue', venue);
+      await loadShots(); // Load shots for this venue
     });
     
-    // Load saved venue
-    const savedVenue = localStorage.getItem('creatorVenue');
-    if (savedVenue) document.getElementById('venueSelect').value = savedVenue;
-    
     // Init
-    renderShotList();
+    async function init() {
+      // Load saved venue
+      try {
+        const cloudVenue = await dataSync.load('venue');
+        if (cloudVenue) {
+          document.getElementById('venueSelect').value = cloudVenue;
+        }
+      } catch (e) {
+        const savedVenue = localStorage.getItem('creatorVenue');
+        if (savedVenue) document.getElementById('venueSelect').value = savedVenue;
+      }
+      
+      await loadShots();
+      
+      // Splash
+      setTimeout(() => document.getElementById('splash').classList.add('hidden'), 1200);
+    }
     
-    // Splash
-    setTimeout(() => document.getElementById('splash').classList.add('hidden'), 1200);
+    init();
   </script>
+<script src="/shared/back-to-dashboard.js"></script>
 </body>
 </html>
