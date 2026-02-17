@@ -1,0 +1,9 @@
+{
+  "name": "Content Creator - The Light Park",
+  "short_name": "Content Creator",
+  "start_url": "/content-creator/",
+  "display": "standalone",
+  "background_color": "#0B0D14",
+  "theme_color": "#a855f7",
+  "icons": []
+}
